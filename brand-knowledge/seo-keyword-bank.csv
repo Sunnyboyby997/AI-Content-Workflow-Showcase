@@ -1,10 +1,11 @@
 keyword,intent,funnel_stage,monthly_volume,difficulty,target_region
-best budget phone for students,transactional,BOFU,8800,medium,US
-phone with longest battery life,informational,TOFU,5400,medium,US
-budget laptop for college,transactional,BOFU,6600,medium,US
-cheap noise cancelling earbuds,transactional,BOFU,4400,low,US
-student laptop under 500,transactional,BOFU,9900,high,US
-best budget wireless earbuds 2026,transactional,BOFU,8100,medium,US
-how long do wireless earbuds last,informational,TOFU,2900,low,US
-is [brand] worth it,informational,MOFU,1600,low,US
-phone battery life test,informational,TOFU,3600,low,US
+iphone 17 review,informational,MOFU,90500,high,US
+iphone 17 battery life,informational,TOFU,12100,medium,US
+iphone 17 vs samsung galaxy s25,commercial,MOFU,27100,high,US
+iphone 17 vs iphone 16,commercial,MOFU,14800,medium,US
+best iphone for students,transactional,BOFU,6600,medium,US
+is iphone 17 worth it,informational,MOFU,3600,low,US
+iphone battery life test,informational,TOFU,4400,low,US
+macbook air m4 review,informational,MOFU,9900,medium,US
+airpods pro 3 review,informational,MOFU,5400,medium,US
+how long does iphone battery last,informational,TOFU,2900,low,US
