@@ -1,0 +1,7 @@
+# macOS 系统文件
+.DS_Store
+
+# 无关目录（不纳入作品仓库）
+aether/
+stuff/
+config.json
