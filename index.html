@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>海外 DTC 品牌内容 AI 工作流 — 作品集</title>
+<style>
+  :root{
+    --bg:#f5f6f8; --card:#ffffff; --ink:#1c2333; --muted:#5b6472; --line:#e6e8ee;
+    --brand:#2f5bd8; --brand-dark:#2446a8; --green:#1e9e6a; --orange:#e07b2a; --purple:#7a4fd0;
+    --code-bg:#0f1420; --code-ink:#e8ecf5;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--ink); line-height:1.7; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1020px; margin:0 auto; padding:0 24px 80px;}
+
+  /* Hero */
+  .hero{background:linear-gradient(135deg,#1c2333 0%,#2f5bd8 100%); color:#fff; padding:64px 24px 56px; text-align:center;}
+  .hero .tag{display:inline-block; border:1px solid rgba(255,255,255,.35); padding:4px 14px; border-radius:999px; font-size:13px; letter-spacing:.5px; margin-bottom:18px;}
+  .hero h1{font-size:34px; font-weight:700; margin-bottom:12px; letter-spacing:-.5px;}
+  .hero p{font-size:16px; opacity:.9; max-width:640px; margin:0 auto 22px;}
+  .hero .stack{display:flex; gap:10px; justify-content:center; flex-wrap:wrap;}
+  .hero .stack span{background:rgba(255,255,255,.14); padding:6px 14px; border-radius:8px; font-size:13px;}
+
+  /* Sections */
+  section{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:32px; margin-top:28px;}
+  h2{font-size:22px; font-weight:700; margin-bottom:6px; letter-spacing:-.3px;}
+  .lead{color:var(--muted); font-size:14px; margin-bottom:22px;}
+  h3{font-size:15px; font-weight:700; margin:18px 0 8px;}
+
+  /* Architecture grid */
+  .grid4{display:grid; grid-template-columns:repeat(4,1fr); gap:14px;}
+  .layer{border:1px solid var(--line); border-radius:12px; padding:18px 16px; text-align:center;}
+  .layer .num{font-size:12px; font-weight:700; color:#fff; border-radius:6px; padding:2px 9px; display:inline-block; margin-bottom:10px;}
+  .layer h4{font-size:15px; margin-bottom:6px;}
+  .layer p{font-size:12.5px; color:var(--muted);}
+  .l1{background:#eef2ff;} .l1 .num{background:var(--brand);}
+  .l2{background:#eafaf2;} .l2 .num{background:var(--green);}
+  .l3{background:#fdf3e9;} .l3 .num{background:var(--orange);}
+  .l4{background:#f3eefb;} .l4 .num{background:var(--purple);}
+
+  /* Flow */
+  .flow{display:flex; align-items:stretch; gap:10px; flex-wrap:wrap; margin:8px 0 4px;}
+  .flow .node{flex:1; min-width:160px; border:1px solid var(--line); border-radius:12px; padding:16px; background:#fafbfd;}
+  .flow .node .who{font-size:12px; color:var(--muted); margin-bottom:4px;}
+  .flow .node .name{font-weight:700; font-size:15px; margin-bottom:6px;}
+  .flow .node .do{font-size:12.5px; color:var(--muted);}
+  .flow .arrow{align-self:center; font-size:22px; color:var(--muted);}
+  .io{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;}
+  .io .box{flex:1; min-width:180px; background:var(--code-bg); color:var(--code-ink); border-radius:10px; padding:14px 16px; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px;}
+
+  /* Cards */
+  .cards{display:grid; grid-template-columns:repeat(2,1fr); gap:14px;}
+  .card{border:1px solid var(--line); border-radius:12px; padding:18px; background:#fafbfd;}
+  .card .ttl{font-weight:700; font-size:15px; margin-bottom:4px; display:flex; align-items:center; gap:8px;}
+  .card .badge{font-size:11px; font-weight:700; padding:2px 8px; border-radius:5px; color:#fff;}
+  .card .role{font-size:13px; color:var(--muted); margin-bottom:8px;}
+  .card ul{list-style:none; padding:0;}
+  .card li{font-size:13px; color:var(--ink); padding:3px 0 3px 16px; position:relative;}
+  .card li::before{content:"›"; position:absolute; left:2px; color:var(--brand); font-weight:700;}
+
+  /* Knowledge base */
+  .kb{display:grid; grid-template-columns:repeat(2,1fr); gap:10px;}
+  .kb .f{background:#fafbfd; border:1px solid var(--line); border-radius:9px; padding:10px 14px; font-family:ui-monospace,Menlo,monospace; font-size:12.5px; display:flex; align-items:center; gap:8px;}
+  .kb .f .dot{width:8px; height:8px; border-radius:50%; background:var(--orange); flex:none;}
+
+  /* Outputs */
+  .out{border:1px solid var(--line); border-radius:12px; margin-bottom:16px; overflow:hidden;}
+  .out .oh{display:flex; align-items:center; justify-content:space-between; padding:10px 16px; background:#f0f2f7; font-size:12.5px; color:var(--muted); border-bottom:1px solid var(--line);}
+  .out .oh .path{font-family:ui-monospace,Menlo,monospace;}
+  .out .body{padding:18px 20px;}
+  .out .body .title{font-size:17px; font-weight:700; margin-bottom:10px;}
+  .out .body p{margin-bottom:10px; font-size:14px;}
+  .out .body ul{margin:0 0 10px 20px;}
+  .out .body li{font-size:14px; margin-bottom:4px;}
+  .script{border-left:3px solid var(--brand); background:#f8f9fc; border-radius:8px; padding:12px 16px; margin-bottom:10px;}
+  .script .st{font-size:11px; font-weight:700; color:var(--brand); letter-spacing:.5px; margin-bottom:4px;}
+  .script .talk{font-size:13.5px;}
+  .script .screen{font-size:12.5px; color:var(--muted); margin-top:4px;}
+  .selfcheck{font-size:12px; color:var(--green); background:#eafaf2; border-radius:8px; padding:10px 14px; margin-top:10px;}
+
+  /* Table */
+  table{width:100%; border-collapse:collapse; font-size:13px; margin:10px 0;}
+  th,td{border:1px solid var(--line); padding:8px 10px; text-align:left;}
+  th{background:#f0f2f7; font-weight:700;}
+  .hi{color:var(--green); font-weight:700;}
+  .lo{color:#d14343; font-weight:700;}
+
+  .footer{text-align:center; color:var(--muted); font-size:12.5px; margin-top:36px;}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; background:#eef1f6; padding:1px 6px; border-radius:5px; font-size:12.5px;}
+  @media(max-width:720px){.grid4,.cards,.kb{grid-template-columns:1fr;} .flow{flex-direction:column;} .flow .arrow{transform:rotate(90deg); align-self:center;}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <span class="tag">AI 全链路内容运营 · 作品集</span>
+  <h1>海外 DTC 品牌内容 AI 工作流</h1>
+  <p>用 Claude Code 的 Skill + 子 Agent 编排搭建的一套「品牌知识库 → 内容生产 → 数据复盘」闭环，批量产出去AI化文案、社媒贴与短视频脚本。</p>
+  <div class="stack">
+    <span>Claude Code</span><span>Skills（4 个）</span><span>子 Agent（4 个）</span><span>品牌知识库</span><span>SEO / GEO</span><span>去AI化文案</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- 概述 -->
+  <section>
+    <h2>这个项目解决什么</h2>
+    <p class="lead">海外 DTC 内容团队最头疼的三件事，用一套可复用的 AI 工作流解决。</p>
+    <div class="cards">
+      <div class="card">
+        <div class="ttl"><span class="badge" style="background:var(--brand)">1</span> 文案有 AI 味、没人味</div>
+        <div class="role">靠一套「去AI化」Skill：内置中英文禁用词表（seamless / 赋能 / 极致…），把空泛形容词逼成具体数字和场景。</div>
+      </div>
+      <div class="card">
+        <div class="ttl"><span class="badge" style="background:var(--green)">2</span> 内容生产低效、不 SOP 化</div>
+        <div class="role">把「选题 → 文案 → 脚本 → 复盘」沉淀成 4 个 Skill + 4 个 Agent，批量处理文件夹级内容资产。</div>
+      </div>
+      <div class="card">
+        <div class="ttl"><span class="badge" style="background:var(--orange)">3</span> 品牌知识散落、难复用</div>
+        <div class="role">统一接入品牌知识库（调性 / 卖点 / 人群 / 竞品 / SEO词库 / 本地化参数 / 复盘数据），每次生产都先读知识库。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 架构 -->
+  <section>
+    <h2>四层架构</h2>
+    <p class="lead">对应 JD 要求：Skills 搭工作流、子 Agent 编排、知识库接入、批量产出资产。</p>
+    <div class="grid4">
+      <div class="layer l1"><span class="num">L1</span><h4>Skills（4）</h4><p>去AI化文案<br>SEO/GEO 内容<br>短视频脚本<br>内容复盘</p></div>
+      <div class="layer l2"><span class="num">L2</span><h4>子 Agent（4）</h4><p>策略总控<br>内容生产<br>SEO/GEO<br>数据复盘</p></div>
+      <div class="layer l3"><span class="num">L3</span><h4>品牌知识库</h4><p>定位 / 卖点 / 人群<br>竞品 / 词库 / 本地化<br>复盘数据</p></div>
+      <div class="layer l4"><span class="num">L4</span><h4>内容产出</h4><p>文案 / 社媒 / 脚本<br>GEO 内容 / 复盘资产<br>按类型自动归档</p></div>
+    </div>
+  </section>
+
+  <!-- 协作流程 -->
+  <section>
+    <h2>子 Agent 协作流程</h2>
+    <p class="lead">不是「对话调提示词」，而是四个角色各司其职、串成一条流水线。</p>
+    <div class="flow">
+      <div class="node"><div class="who">输入 · 品牌知识库</div><div class="name">brand-knowledge/</div><div class="do">7 个文件，统一调性与卖点</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="who">总控 Agent</div><div class="name">content-strategist</div><div class="do">定选题 + 排节奏 + 分发任务</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="who">生产 Agent</div><div class="name">copy-producer</div><div class="do">批量产出文案 / 社媒 / 脚本</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="who">复盘 Agent</div><div class="name">data-review-agent</div><div class="do">拆爆款 / 归因扑街 / 沉淀资产</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="who">输出 · 内容归档</div><div class="name">content_output/</div><div class="do">按类型自动落盘</div></div>
+    </div>
+    <div class="io">
+      <div class="box">seo-geo-specialist（SEO/GEO 本地化 Agent）与 copy-producer 并行，负责关键词选题、AI 搜索优化、多地区本地化。</div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section>
+    <h2>4 个 Skill（可复用 SOP）</h2>
+    <p class="lead">每个 Skill = 一套沉淀下来的标准作业流程，Claude 按 description 自动触发。</p>
+    <div class="cards">
+      <div class="card"><div class="ttl"><span class="badge" style="background:var(--brand)">S1</span> brand-copy</div><div class="role">去AI化品牌文案</div><ul><li>先读品牌知识库，缺信息就问、不瞎编</li><li>内置中英文 AI 味禁用词表（60+ 词）</li><li>短句、给具体数字、诚实写产品边界</li><li>强制输出格式：标题+3段+3要点</li></ul></div>
+      <div class="card"><div class="ttl"><span class="badge" style="background:var(--green)">S2</span> seo-geo-builder</div><div class="role">SEO & GEO 本地化内容</div><ul><li>关键词意图 → 内容类型（信息/交易型）</li><li>站内 SEO：Title/Meta/Schema/内链</li><li>GEO：FAQ/列表/对比结构，让 AI 搜索引用</li><li>多地区本地化（语言/货币/单位）</li></ul></div>
+      <div class="card"><div class="ttl"><span class="badge" style="background:var(--orange)">S3</span> short-video-script</div><div class="role">海外短视频 / TikTok 脚本</div><ul><li>HOOK / 场景 / 演示 / CTA 四段结构</li><li>每条含「口播词 + 屏上文字」</li><li>前 3 秒必须给钩子</li><li>复用 brand-copy 的去AI化词表</li></ul></div>
+      <div class="card"><div class="ttl"><span class="badge" style="background:var(--purple)">S4</span> content-retrospect</div><div class="role">内容复盘 & 资产沉淀</div><ul><li>数据 → 归因 → 结论 → 动作四步</li><li>爆款拆解 + 扑街归因</li><li>把规律写回 SOP，形成迭代闭环</li><li>沉淀可复用素材资产</li></ul></div>
+    </div>
+  </section>
+
+  <!-- Agents -->
+  <section>
+    <h2>4 个子 Agent（任务编排）</h2>
+    <p class="lead">写在 <code>.claude/agents/</code> 下，每个 Agent 有独立职责与工具权限。</p>
+    <div class="cards">
+      <div class="card"><div class="ttl"><span class="badge" style="background:var(--brand)">A1</span> content-strategist</div><div class="role">内容策略总操盘 · 工具 Read/Write/Grep/Glob/Task</div><ul><li>全年/月度选题与推广节奏</li><li>把控品牌调性</li><li>分发任务给生产/SEO/数据 Agent</li><li>结果导向，不被动执行</li></ul></div>
+      <div class="card"><div class="ttl"><span class="badge" style="background:var(--green)">A2</span> copy-producer</div><div class="role">内容生产 · 工具 Read/Write/Grep/Skill</div><ul><li>批量产出去AI化文案/社媒/脚本</li><li>调用 brand-copy、short-video-script</li><li>产出落到 content_output/ 归档</li><li>草稿标注哪些需人工挑选</li></ul></div>
+      <div class="card"><div class="ttl"><span class="badge" style="background:var(--orange)">A3</span> seo-geo-specialist</div><div class="role">SEO/GEO 本地化 · 工具 Read/Write/Grep/Skill</div><ul><li>关键词调研与选题</li><li>SEO 内容 + GEO 优化</li><li>多地区本地化</li><li>调用 seo-geo-builder</li></ul></div>
+      <div class="card"><div class="ttl"><span class="badge" style="background:var(--purple)">A4</span> data-review-agent</div><div class="role">数据复盘 & 资产沉淀 · 工具 Read/Write/Grep/Skill</div><ul><li>复盘流量/转化数据</li><li>爆款拆解、扑街归因</li><li>沉淀可复用模板/SOP</li><li>调用 content-retrospect</li></ul></div>
+    </div>
+  </section>
+
+  <!-- 知识库 -->
+  <section>
+    <h2>品牌知识库（7 个文件）</h2>
+    <p class="lead">所有 Skill / Agent 生产前都先读这里，保证调性、卖点、数据统一。</p>
+    <div class="kb">
+      <div class="f"><span class="dot"></span>brand-profile.md — 品牌定位</div>
+      <div class="f"><span class="dot"></span>product-selling-points.md — 产品卖点</div>
+      <div class="f"><span class="dot"></span>target-audience.md — 目标用户</div>
+      <div class="f"><span class="dot"></span>competitor-analysis.md — 竞品分析</div>
+      <div class="f"><span class="dot"></span>seo-keyword-bank.csv — SEO 词库</div>
+      <div class="f"><span class="dot"></span>geo-region-list.md — GEO 本地化参数</div>
+      <div class="f"><span class="dot"></span>content-performance.csv — 复盘数据</div>
+    </div>
+  </section>
+
+  <!-- 产出 -->
+  <section>
+    <h2>实际产出（真实跑出的内容）</h2>
+    <p class="lead">下面是从「iPhone 17 续航实测」选题真实跑出来的成品，英文为海外 DTC 内容，参数为 Apple 在售产品的真实数据。</p>
+
+    <div class="out">
+      <div class="oh"><span>落地页文案</span><span class="path">content_output/product_copy/phone-landing-copy.md</span></div>
+      <div class="body">
+        <div class="title">All-day battery. A19 speed. The honest part: you'll pay for it.</div>
+        <p>You unplug at 7am and don't think about a charger until you're home after dark. The iPhone 17 runs the A19 chip, and the battery is rated for up to 30 hours of video. Our own test: 24 and a half hours of continuous streaming before it died. On a normal day — calls, scrolling, some games — you land around 30% by 11pm.</p>
+        <p>The screen is 6.3 inches at 120Hz. That's the same ProMotion refresh rate the Pro models used to keep to themselves. It's smooth, and it's finally on the base model.</p>
+        <p>Now the part most pages skip. Charging tops out at 30W. Some Android flagships do 100W and fill in 15 minutes. If you're the type who forgets to charge overnight and needs a full top-up in a coffee shop, this will annoy you. It also starts at $799 — this is not a budget phone.</p>
+        <ul>
+          <li>A19 chip, 6-core CPU / 5-core GPU</li>
+          <li>6.3" 120Hz OLED, up to 30h video battery</li>
+          <li>30W charging: slower than Android flagships, fine overnight</li>
+        </ul>
+        <div class="selfcheck">去AI化自查：避开 seamless / robust / cutting-edge / revolutionary 等英文 AI 味词；全部用具体数字（30h、24.5h、30W、120Hz、$799）；主动写「充电慢、价格高」这两个边界，不吹捧。</div>
+      </div>
+    </div>
+
+    <div class="out">
+      <div class="oh"><span>TikTok 脚本（续航实测）</span><span class="path">content_output/tiktok_script/tiktok-battery-test.md</span></div>
+      <div class="body">
+        <div class="script"><div class="st">HOOK · 0–3s</div><div class="talk">Phone left the house at 100% this morning. Not charging it till I get home. Let's see what's left.</div><div class="screen">🖥 100% → ?</div></div>
+        <div class="script"><div class="st">场景 · 3–10s</div><div class="talk">Full day — classes, no outlet at my seat, group chat all day, an hour of videos on the way home.</div><div class="screen">🖥 无插座 · 一天</div></div>
+        <div class="script"><div class="st">演示 · 10–20s</div><div class="talk">It's 11:40pm. Battery's at 31%. The A19 chip sips power — Apple rates it for 30 hours of video, and in a straight streaming test it hit 24 and a half. One charge, one full day.</div><div class="screen">🖥 11:40pm · 31%</div></div>
+        <div class="script"><div class="st">边界 · 诚实说缺点</div><div class="talk">One honest thing — charging is 30W, slower than a lot of Androids. Overnight it's a non-issue; if you need a 15-minute top-up, this isn't it.</div><div class="screen">🖥 充电 30W · 比安卓旗舰慢</div></div>
+        <div class="script"><div class="st">CTA · 最后 3s</div><div class="talk">What did your battery look like today? Drop it in the comments.</div><div class="screen">🖥 评论区晒你的电量</div></div>
+        <div class="selfcheck">脚本自查：钩子 3 秒内抛出悬念（100% 出门）；有具体数字（31%、30h、24.5h、30W、时间点）；有 CTA；写明了「充电慢」这一产品边界。</div>
+      </div>
+    </div>
+
+    <div class="out">
+      <div class="oh"><span>Reddit 种草帖（真实体验）</span><span class="path">content_output/social_posts/reddit-review.md</span></div>
+      <div class="body">
+        <div class="title">3 months with the iPhone 17 — the parts nobody puts in the ad</div>
+        <p>Paid $799, had it about 3 months. Writing this because I nearly didn't buy it, and the reasons I nearly didn't are worth knowing.</p>
+        <p><strong>The good:</strong></p>
+        <ul>
+          <li>Battery is the real deal. On a normal day — messaging, reddit, YouTube, some light games — I go 7am to about 11pm and land around 30%. One charge a day actually holds up.</li>
+          <li>A19 chip is fast. Apps open instantly, no stutter, even with a dozen tabs and a game in the background.</li>
+          <li>120Hz screen. This used to be a Pro-only thing. Scrolling feels noticeably better than my old 60Hz phone.</li>
+        </ul>
+        <p><strong>The not-so-good (the honesty part):</strong></p>
+        <ul>
+          <li>Charging. It's 30W. My friend's Android does 100W and fills in 15 minutes while this takes about an hour. If you forget to charge overnight, you'll feel it.</li>
+          <li>Price. $799 for a base phone is a lot, and 256GB is the floor — no microSD.</li>
+        </ul>
+        <p><strong>Who it's for:</strong> you want a phone that lasts a full day and you're already in — or fine joining — the Apple ecosystem. You keep phones 3+ years and care about software updates.</p>
+        <p><strong>Who it's not for:</strong> anyone who needs 15-minute fast charging, or who wants the cheapest phone that does the job.</p>
+      </div>
+    </div>
+
+    <div class="out">
+      <div class="oh"><span>数据复盘报告</span><span class="path">content_output/retrospective_assets/复盘报告.md</span></div>
+      <div class="body">
+        <table>
+          <tr><th>渠道</th><th>类型</th><th>曝光</th><th>CTR</th><th>点击转化率</th><th>结论</th></tr>
+          <tr><td>reddit</td><td>种草帖</td><td>8,000</td><td class="hi">7.50%</td><td class="hi">7.50%</td><td>真实体验帖，转化最高</td></tr>
+          <tr><td>google</td><td>SEO 文章</td><td>25,000</td><td class="hi">7.20%</td><td>1.39%</td><td>信息型长尾词，拉新强</td></tr>
+          <tr><td>tiktok</td><td>短视频</td><td>120,000</td><td>3.75%</td><td>2.67%</td><td>前三秒钩子强，转化量大</td></tr>
+          <tr><td>instagram</td><td>文案</td><td>30,000</td><td>3.00%</td><td>3.33%</td><td>车轱辘话多，钩子弱</td></tr>
+          <tr><td>tiktok</td><td>短视频</td><td>50,000</td><td class="lo">1.60%</td><td class="lo">1.25%</td><td>演示段太拖，全线垫底</td></tr>
+        </table>
+        <div class="selfcheck">复盘结论（一句话）：复制「真实体验种草帖 + 信息型长尾词 SEO」两条高效路线，所有内容（尤其短视频）前 3 秒必给钩子，砍掉拖沓演示和车轱辘话空文案。</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    海外 DTC 品牌内容 AI 工作流 · 由 Claude Code Skills + 子 Agent 搭建 · 真实产出可复现
+  </div>
+</div>
+</body>
+</html>
